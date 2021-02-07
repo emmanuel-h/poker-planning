@@ -1,11 +1,13 @@
-val ktor_version: String by project
-val kotlin_version: String by project
-val logback_version: String by project
+val ktorVersion: String by project
+val kotlinVersion: String by project
+val logbackVersion: String by project
 val exposedVersion: String by project
+val kotlinxVersion: String by project
 
 plugins {
     application
     kotlin("jvm") version "1.4.10"
+    kotlin("plugin.serialization") version "1.4.10"
 }
 
 group = "io.itsf.fr"
@@ -21,10 +23,12 @@ repositories {
 }
 
 dependencies {
-    implementation("io.ktor:ktor-server-netty:$ktor_version")
-    implementation("ch.qos.logback:logback-classic:$logback_version")
-    implementation("io.ktor:ktor-server-core:$ktor_version")
-    testImplementation("io.ktor:ktor-server-tests:$ktor_version")
+    implementation("io.ktor:ktor-server-core:$ktorVersion")
+    implementation("io.ktor:ktor-server-netty:$ktorVersion")
+    implementation("ch.qos.logback:logback-classic:$logbackVersion")
+    implementation("io.ktor:ktor-serialization:$ktorVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:$kotlinxVersion")
+
     implementation("com.h2database:h2:1.4.199")
 
     implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")

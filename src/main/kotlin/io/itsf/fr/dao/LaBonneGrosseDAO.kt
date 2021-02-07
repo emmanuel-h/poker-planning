@@ -1,9 +1,15 @@
-package io.itsf.fr
+package io.itsf.fr.dao
 
-import org.jetbrains.exposed.dao.*
+import io.itsf.fr.models.GameData
+import io.itsf.fr.models.UserData
+import org.jetbrains.exposed.dao.IntEntity
+import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IntIdTable
-import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.StdOutSqlLogger
+import org.jetbrains.exposed.sql.addLogger
 import org.jetbrains.exposed.sql.transactions.transaction
 
 object Users : IntIdTable() {
@@ -30,6 +36,7 @@ class Game(id: EntityID<Int>) : IntEntity(id) {
 }
 
 fun initDatabase() {
+    Database.connect("jdbc:h2:mem:regular;DB_CLOSE_DELAY=-1;", driver = "org.h2.Driver")
     transaction {
         addLogger(StdOutSqlLogger)
         SchemaUtils.create(Games, Users)
@@ -59,9 +66,9 @@ fun createGame(): Int {
     }
 }
 
-fun userVote(userId: Int, cardValue: Int) = transaction {
+fun userVote(userId: Int, vote: Int) = transaction {
     val user = User.findById(userId) ?: throw NoSuchElementException()
-    user.vote = cardValue
+    user.vote = vote
 }
 
 fun getVotes(gameId: Int) = transaction {
@@ -79,4 +86,12 @@ fun resetVotes(gameId: Int) = transaction {
     for (user in game.users) {
         user.vote = -1
     }
+}
+
+fun getUser(userId: Int) : UserData? = transaction {
+    User.findById(userId)?.let { user -> UserData(user.id.value, user.name, user.vote, user.game.id.value) }
+}
+
+fun getGame(gameId: Int) : GameData? = transaction {
+    Game.findById(gameId)?.let { game -> GameData(game.id.value, game.users.map { u -> u.id.value }) }
 }

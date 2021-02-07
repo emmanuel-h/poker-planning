@@ -1,16 +1,19 @@
 package io.itsf.fr
 
-import org.jetbrains.exposed.sql.Database
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import io.itsf.fr.dao.*
+import io.itsf.fr.routes.registerGameRoutes
+import io.itsf.fr.routes.registerUserRoutes
+import io.ktor.application.*
+import io.ktor.application.Application
+import io.ktor.features.*
+import io.ktor.serialization.*
+
 
 class Application {
     companion object {
-        private const val h2ConnectionString = "jdbc:h2:mem:regular;DB_CLOSE_DELAY=-1;"
 
         @JvmStatic
         fun main(args: Array<String>) {
-            Database.connect(h2ConnectionString, driver = "org.h2.Driver")
 
             initDatabase()
             val gameId = createGame()
@@ -26,11 +29,16 @@ class Application {
             resetVotes(gameId)
             val votes2 = getVotes(gameId)
             println(votes2)
+
             io.ktor.server.netty.EngineMain.main(args)
         }
     }
 
-    fun module() {
-
+    fun Application.module() {
+        install(ContentNegotiation) {
+            json()
+        }
+        registerUserRoutes()
+        registerGameRoutes()
     }
 }
