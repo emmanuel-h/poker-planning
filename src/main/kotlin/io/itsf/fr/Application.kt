@@ -26,6 +26,11 @@ class Application {
             resetVotes(gameId)
             val votes2 = getVotes(gameId)
             println(votes2)
+            io.ktor.server.netty.EngineMain.main(args)
         }
+    }
+
+    fun module() {
+
     }
 }
