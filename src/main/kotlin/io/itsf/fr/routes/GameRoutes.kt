@@ -7,9 +7,9 @@ import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 
-fun Route.gameRouting() {
+val gameDAO = GameDAO()
 
-    val gameDAO = GameDAO()
+fun Route.gameRouting() {
 
     route("/game") {
         get("/{id}") {
@@ -29,7 +29,8 @@ fun Route.gameRouting() {
         }
         get("/{id}/vote") {
             val id = call.parameters["id"] ?: return@get call.respondText ("If you don't have an id, you'll not get votes", status = HttpStatusCode.BadRequest)
-            gameDAO.getVotes(id.toInt())
+            val votes = gameDAO.getVotes(id.toInt())
+            call.respond(votes)
         }
     }
 }

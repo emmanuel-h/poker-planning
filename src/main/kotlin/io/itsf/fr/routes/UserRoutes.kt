@@ -8,10 +8,9 @@ import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 
+val userDAO = UserDAO()
 
 fun Route.userRouting() {
-
-    val userDAO = UserDAO()
 
     route("/user") {
         get("/{id}") {

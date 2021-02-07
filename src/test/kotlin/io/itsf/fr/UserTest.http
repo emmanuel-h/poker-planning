@@ -1,0 +1,40 @@
+POST http://127.0.0.1:8080/game
+Content-Type: application/json
+
+{
+}
+
+###
+POST http://127.0.0.1:8080/user
+Content-Type: application/json
+
+{
+  "name": "zigounette",
+  "gameId": "1"
+}
+
+###
+POST http://127.0.0.1:8080/user
+Content-Type: application/json
+
+{
+  "name": "nouille",
+  "gameId": "1"
+}
+###
+POST http://127.0.0.1:8080/user/1/vote
+Content-Type: application/json
+
+4
+
+###
+GET http://127.0.0.1:8080/user/1
+Accept: application/json
+
+###
+GET http://127.0.0.1:8080/game/1/vote
+Accept: application/json
+
+###
+DELETE http://127.0.0.1:8080/game/1/vote
+Accept: application/json
