@@ -6,14 +6,11 @@ import org.slf4j.LoggerFactory
 
 class Application {
     companion object {
-        private val logger: Logger = LoggerFactory.getLogger(Application::class.java)
-        val h2ConnectionString = "jdbc:h2:mem:regular;DB_CLOSE_DELAY=-1;"
+        private const val h2ConnectionString = "jdbc:h2:mem:regular;DB_CLOSE_DELAY=-1;"
 
         @JvmStatic
         fun main(args: Array<String>) {
-            logger.info("H2 database connection string: $h2ConnectionString")
-            val db = Database.connect(h2ConnectionString, driver = "org.h2.Driver")
-            db.useNestedTransactions = true // see https://github.com/JetBrains/Exposed/issues/605
+            Database.connect(h2ConnectionString, driver = "org.h2.Driver")
 
             initDatabase()
             val gameId = createGame()
